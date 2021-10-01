@@ -11,28 +11,52 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
-  compile:
+  build:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo "Hello, first compile"
+      - checkout
+      - run: npm i
+      - run: echo "Hello, building project"
+      - run:
+          name: "Building project"
+          command: npm run lint
 
   test:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo "Hello, first test"
+      - checkout
+      - run: npm i
+      - run: echo "Hello, testing project"
+      - run:
+          name: "Testing project"
+          command: npm run test
 
   analyze:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       - run: echo "Hello, first analysis"
+      - run:
+          name: "Building project"
+          command: npm audit
+      - run:
+          name: on error
+          command: echo "Hello, Error occured when analyzing"
+          when: on_fail
 
 workflows: 
   first_pipeline_workflow:
     jobs:
-      - compile
+      - build
+      - test:
+          requires:
+            - build
+      - analyze:
+          requries:
+            - test 
 
 
 
