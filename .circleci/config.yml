@@ -15,23 +15,25 @@ jobs:
   compile:
     docker:
       - image: circleci/node:13.8.0
-
+    steps:
+      - run: echo "Hello, first compile"
 
   test:
     docker:
       - image: circleci/node:13.8.0
-
-
+    steps:
+      - run: echo "Hello, first test"
 
   analyze:
     docker:
       - image: circleci/node:13.8.0
-
-
-
+    steps:
+      - run: echo "Hello, first analysis"
+      
 workflows: 
   first_pipeline_workflow:
-    - compile
+    jobs:
+      - compile
 
 
 
