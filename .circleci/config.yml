@@ -1,0 +1,39 @@
+version: 1.0
+
+
+commands:
+   print_pipeline_id:
+    description: "Just Testing Command"
+    parameters:
+      to:
+        type: string
+        default: "Hello This is my circle ci"
+    steps:
+      - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
+
+jobs:
+  compile:
+    docker:
+      - image: circleci/node:13.8.0
+
+
+  test:
+    docker:
+      - image: circleci/node:13.8.0
+
+
+
+  analyze:
+    docker:
+      - image: circleci/node:13.8.0
+
+
+
+workflows: 
+  first_pipeline_workflow:
+    - compile
+
+
+
+
+
