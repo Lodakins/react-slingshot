@@ -18,16 +18,17 @@ export default function fuelSavingsReducer(state = initialState.fuelSavings, act
       return objectAssign({}, state, {dateModified: action.dateModified});
 
     case CALCULATE_FUEL_SAVINGS:
-      newState = objectAssign({}, state);
-      newState[action.fieldName] = action.value;
-      newState.necessaryDataIsProvidedToCalculateSavings = necessaryDataIsProvidedToCalculateSavings(newState);
-      newState.dateModified = action.dateModified;
+      inewState = objectAssign({}, state);
+      inewState[action.fieldName] = action.value;
 
-      if (newState.necessaryDataIsProvidedToCalculateSavings) {
-        newState.savings = calculateSavings(newState);
+      inewState.necessaryDataIsProvidedToCalculateSavings = necessaryDataIsProvidedToCalculateSavings(newState);
+      inewState.dateModified = action.dateModified;
+
+      if (inewState.necessaryDataIsProvidedToCalculateSavings) {
+        inewState.savings = calculateSavings(newState);
       }
 
-      return newState;
+      return inewState;
 
     default:
       return state;
