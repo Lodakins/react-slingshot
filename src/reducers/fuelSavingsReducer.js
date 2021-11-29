@@ -9,7 +9,7 @@ import initialState from './initialState';
 // Note that I'm using Object.assign to create a copy of current state
 // and update values on the copy.
 export default function fuelSavingsReducer(state = initialState.fuelSavings, action) {
-  let newState;
+  let inewState;
 
   switch (action.type) {
     case SAVE_FUEL_SAVINGS:
