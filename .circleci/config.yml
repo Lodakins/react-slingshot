@@ -35,9 +35,9 @@ jobs:
           name: "Persist to workspace"
           command: echo "text to output here" > output.txt
       - persist_to_workspace:
-          root: /tmp/dir
+          root: ~/
           paths:
-            - foo/bar
+            - output.txt
   print_output_file:
     docker:
       - image: circleci/node:13.8.0
@@ -47,7 +47,7 @@ jobs:
           name: "Attach to workspace"
           command: echo "Attaching to workspace"
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/
       - run: cat output.txt
   # build:
   #   docker:
