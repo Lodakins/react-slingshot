@@ -25,16 +25,39 @@ jobs:
       - run:
           name: "CIRCLE CI WORKFLOW ID"
           command: echo ${CIRCLE_WORKFLOW_ID}
-  build:
+
+  save_hello_world_output:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: "echo persisting file to disk"
+      - run: 
+          name: "Persist to workspace"
+          command: echo "text to output here" > output.txt
+      - persist_to_workspace:
+          root: /tmp/dir
+          paths:
+            - foo/bar
+  print_output_file:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: npm i
-      - run: echo "Hello, building project"
       - run:
-          name: "Building project"
-          command: npm run lint
+          name: "Attach to workspace"
+          command: echo "Attaching to workspace"
+      - attach_workspace:
+          at: /tmp/workspace
+  # build:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+  #     - run: npm i
+  #     - run: echo "Hello, building project"
+  #     - run:
+  #         name: "Building project"
+  #         command: npm run lint
 
   # test:
   #   docker:
@@ -66,6 +89,10 @@ workflows:
     jobs:
       - cicd_workflow
       - build
+      - save_hello_world_output
+      - print_output_file:
+          requires: 
+            - save_hello_world_output
       # - test:
       #     requires:
       #       - build
