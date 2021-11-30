@@ -11,6 +11,16 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
+
+  cicd_workflow:
+      docker:
+        - image: circleci/node:13.8.0
+      steps:
+        - run: "echo Hello printing CircleCI Workflow"
+        - run: 
+            name: "PROJECT ENVIRONMENT VARIABLE ID"
+            command: echo $TEST_ENV_VAR
+
   build:
     docker:
       - image: circleci/node:13.8.0
@@ -22,30 +32,30 @@ jobs:
           name: "Building project"
           command: npm run lint
 
-  test:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - run: npm i
-      - run: echo "Hello, testing project"
-      - run:
-          name: "Testing project"
-          command: npm run test
+  # test:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+  #     - run: npm i
+  #     - run: echo "Hello, testing project"
+  #     - run:
+  #         name: "Testing project"
+  #         command: npm run test
 
-  analyze:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - run: echo "Hello, first analyze"
-      - run:
-          name: "Building project"
-          command: npm audit
-      - run:
-          name: on error
-          command: echo "Hello, Error occured when analyzing"
-          when: on_fail
+  # analyze:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+  #     - run: echo "Hello, first analyze"
+  #     - run:
+  #         name: "Building project"
+  #         command: npm audit
+  #     - run:
+  #         name: on error
+  #         command: echo "Hello, Error occured when analyzing"
+  #         when: on_fail
 
 workflows: 
   first_pipeline_workflow:
