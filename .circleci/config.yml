@@ -11,16 +11,14 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
-
   cicd_workflow:
-      docker:
-        - image: circleci/node:13.8.0
-      steps:
-        - run: "echo Hello printing CircleCI Workflow"
-        - run: 
-            name: "PROJECT ENVIRONMENT VARIABLE ID"
-            command: echo $TEST_ENV_VAR
-
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: "echo Hello printing CircleCI Workflow"
+      - run: 
+          name: "PROJECT ENVIRONMENT VARIABLE ID"
+          command: echo $TEST_ENV_VAR
   build:
     docker:
       - image: circleci/node:13.8.0
@@ -62,12 +60,12 @@ workflows:
     jobs:
       - cicd_workflow
       - build
-      - test:
-          requires:
-            - build
-      - analyze:
-          requires:
-            - test 
+      # - test:
+      #     requires:
+      #       - build
+      # - analyze:
+      #     requires:
+      #       - test 
 
 
 
