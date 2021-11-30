@@ -31,6 +31,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run: "echo persisting file to disk"
+      - run:
+          name: "Creating directory to persist to"
+          command: "mkdir /tmp/dir"
       - run: 
           name: "Persist to workspace"
           command: echo "text to output here" > ~/output.txt
