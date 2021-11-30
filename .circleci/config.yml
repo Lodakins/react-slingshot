@@ -33,12 +33,12 @@ jobs:
       - run: "echo persisting file to disk"
       - run:
           name: "Creating directory to persist to"
-          command: "mkdir /tmp/dir"
+          command: "mkdir ~/tmp/dir"
       - run: 
           name: "Persist to workspace"
           command: echo "text to output here" > ~/output.txt
       - persist_to_workspace:
-          root: /tmp/dir
+          root: ~/tmp/dir
           paths:
             - output.txt
   print_output_file:
