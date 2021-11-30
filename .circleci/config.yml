@@ -22,6 +22,9 @@ jobs:
       - run:
           name: "CIRCLE BRANCH"
           command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: "CIRCLE CI WORKFLOW ID"
+          command: echo ${CIRCLE_WORKFLOW_ID}
   build:
     docker:
       - image: circleci/node:13.8.0
