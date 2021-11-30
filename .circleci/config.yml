@@ -19,6 +19,9 @@ jobs:
       - run: 
           name: "PROJECT ENVIRONMENT VARIABLE ID"
           command: echo $TEST_ENV_VAR
+      - run:
+          name: "CIRCLE BRANCH"
+          command: echo ${CIRCLE_BRANCH}
   build:
     docker:
       - image: circleci/node:13.8.0
