@@ -25,6 +25,8 @@ jobs:
       - run:
           name: "CIRCLE CI WORKFLOW ID"
           command: echo ${CIRCLE_WORKFLOW_ID}
+      - print_pipeline_id:
+          - to: ${CIRCLE_WORKFLOW_ID}
 
   save_hello_world_output:
     docker:
@@ -33,12 +35,12 @@ jobs:
       - run: "echo persisting file to disk"
       - run:
           name: "Creating directory to persist to"
-          command: "mkdir ~/tmp/dir"
+          command: "~/"
       - run: 
           name: "Persist to workspace"
           command: echo "text to output here" > ~/output.txt
       - persist_to_workspace:
-          root: ~/tmp/dir
+          root: ~/
           paths:
             - output.txt
   print_output_file:
@@ -50,7 +52,7 @@ jobs:
           name: "Attach to workspace"
           command: echo "Attaching to workspace"
       - attach_workspace:
-          at: /tmp/dir
+          at: ~/
       - run: cat ~/output.txt
   # build:
   #   docker:
