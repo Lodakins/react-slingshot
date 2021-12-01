@@ -35,7 +35,7 @@ jobs:
       - run: "echo persisting file to disk"
       - run:
           name: "Creating directory to persist to"
-          command: "~/"
+          command: "echo creating a direcotry"
       - run: 
           name: "Persist to workspace"
           command: echo "text to output here" > ~/output.txt
