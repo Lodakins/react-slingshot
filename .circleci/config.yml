@@ -54,6 +54,18 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: cat ~/output.txt
+  create_infrastructure: 
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+              --region us-east-1
   # build:
   #   docker:
   #     - image: circleci/node:13.8.0
@@ -94,10 +106,11 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
-      - save_hello_world_output
-      - print_output_file:
-          requires: 
-            - save_hello_world_output
+      - create_infrastructure
+      # - save_hello_world_output
+      # - print_output_file:
+      #     requires: 
+      #       - save_hello_world_output
       # - test:
       #     requires:
       #       - build
