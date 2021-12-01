@@ -26,7 +26,7 @@ jobs:
           name: "CIRCLE CI WORKFLOW ID"
           command: echo ${CIRCLE_WORKFLOW_ID}
       - print_pipeline_id:
-          - to: ${CIRCLE_WORKFLOW_ID}
+          to: ${CIRCLE_WORKFLOW_ID}
 
   save_hello_world_output:
     docker:
