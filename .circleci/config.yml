@@ -123,7 +123,7 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
-      - create_infrastructure
+      - create_infastructure
       # - save_hello_world_output
       # - print_output_file:
       #     requires: 
