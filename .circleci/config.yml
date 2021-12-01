@@ -11,6 +11,23 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
+  create_infastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["b2:1e:84:aa:f1:b6:9e:44:25:ff:90:09:1f:16:ea:a1"] 
+      - run:
+          name: Install dependencies
+          command: |
+            # install the dependencies needed for your playbook
+            apk add --update ansible 
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i inventory.txt main4.yml
+
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
@@ -106,7 +123,7 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
-      - create_infrastructure
+      # - create_infrastructure
       # - save_hello_world_output
       # - print_output_file:
       #     requires: 
