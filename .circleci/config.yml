@@ -1,7 +1,18 @@
 version: 2.1
 
 commands:
-   print_pipeline_id:
+  destroy_environment:
+    description: "Rolling back changes"
+    steps:
+      - run:
+          name: Destroy environment
+          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+
+  print_pipeline_id:
     description: "Just Testing Command"
     parameters:
       to:
@@ -11,6 +22,18 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
+  create_infastructure: 
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+              --region us-east-1
   configure_infastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -36,19 +59,20 @@ jobs:
       - run:
           name: smoke test
           command: |
-            URL="https://blog.udacity.com/"
+            return 1
+            # URL="https://blog.udacity.com/"
             # Test if website exists
-            if curl -s --head ${URL} 
-            then
-              return 0
-            else
-              return 1
-            fi
-      - run:
-          name: on error
-          command: echo "Hello, Error occured when analyzing"
-          when: on_fail
-
+            # if curl -s --head ${URL} 
+            # then
+            #   return 0
+            # else
+            #   return 1
+            # fi
+      - destroy_environment
+      # - run:
+      #     name: on error
+      #     command: echo "Hello, Error occured when analyzing"
+      #     when: on_fail
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
@@ -93,18 +117,7 @@ jobs:
   #     - attach_workspace:
   #         at: ~/
   #     - run: cat ~/output.txt
-  create_infastructure: 
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Create Cloudformation Stack
-          command: |
-            aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
-              --region us-east-1
+  
   # build:
   #   docker:
   #     - image: circleci/node:13.8.0
@@ -145,9 +158,11 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
+      - create_infastructure
+      - smoke_test:
+          requires:
+            - create_infastructure
       # - configure_infastructure
-      - smoke_test
-      # - create_infastructure
       # - save_hello_world_output
       # - print_output_file:
       #     requires: 
