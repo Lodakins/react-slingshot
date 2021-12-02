@@ -11,7 +11,7 @@ commands:
       - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
 
 jobs:
-  create_infastructure:
+  configure_infastructure:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -71,18 +71,18 @@ jobs:
   #     - attach_workspace:
   #         at: ~/
   #     - run: cat ~/output.txt
-  # create_infrastructure: 
-  #   docker:
-  #     - image: amazon/aws-cli
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Create Cloudformation Stack
-  #         command: |
-  #           aws cloudformation deploy \
-  #             --template-file template.yml \
-  #             --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
-  #             --region us-east-1
+  create_infrastructure: 
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+              --region us-east-1
   # build:
   #   docker:
   #     - image: circleci/node:13.8.0
