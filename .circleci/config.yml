@@ -14,7 +14,7 @@ commands:
         type: string
     steps:
       - run: echo << parameters.id >>
-
+      
   destroy_environment:
     description: "Destroying environment"
     steps:
