@@ -1,35 +1,32 @@
 version: 2.1
-
-
+# Use a package of configuration called an orb.
 orbs:
   # Choose either one of the orbs below
   # Declare a dependency on the welcome-orb
   # welcome: circleci/welcome-orb@0.4.1
   aws-cli: circleci/aws-cli@2.0.3
+# Orchestrate or schedule a set of jobs
 
 commands:
+  print_pipeline_id:
+    parameters:
+      id:
+        type: string
+    steps:
+      - run: echo << parameters.id >>
+
   destroy_environment:
     steps:
-      - run: echo ${CIRCLE_WORKFLOW_ID}
       - run:
           name: Destroy environment
-          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
-          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable
+          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
 
-  print_pipeline_id:
-    description: "Just Testing Command"
-    parameters:
-      to:
-        type: string
-        default: "Hello This is my circle ci"
-    steps:
-      - run: echo  "Hello, This is my circle ci id <<parameters.to>>"
-
 jobs:
-  create_infastructure: 
+  create_infastructure:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -49,12 +46,12 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b2:1e:84:aa:f1:b6:9e:44:25:ff:90:09:1f:16:ea:a1"] 
+          fingerprints: ["b2:1e:84:aa:f1:b6:9e:44:25:ff:90:09:1f:16:ea:a1"]
       - run:
           name: Install dependencies
           command: |
             # install the dependencies needed for your playbook
-            apk add --update ansible 
+            apk add --update ansible
       - run:
           name: Configure server
           command: |
@@ -64,33 +61,27 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
-      - checkout
       - run: apk add --update curl
       - run:
           name: smoke test
           command: |
-            return 1
-            # URL="https://blog.udacity.com/"
+            URL="https://sblog.udacity.com/"
             # Test if website exists
-            # if curl -s --head ${URL} 
-            # then
-            #   return 0
-            # else
-            #   return 1
-            # fi
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
       - destroy_environment
-      # - run:
-      #     name: on error
-      #     command: echo "Hello, Error occured when analyzing"
-      #     when: on_fail
-
+      
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - run: "echo Hello printing CircleCI Workflow"
-      - run: 
+      - run:
           name: "PROJECT ENVIRONMENT VARIABLE ID"
           command: echo $TEST_ENV_VAR
       - run:
@@ -100,7 +91,7 @@ jobs:
           name: "CIRCLE CI WORKFLOW ID"
           command: echo ${CIRCLE_WORKFLOW_ID}
       - print_pipeline_id:
-          to: ${CIRCLE_WORKFLOW_ID}
+          id: ${CIRCLE_WORKFLOW_ID}
 
   # save_hello_world_output:
   #   docker:
@@ -110,7 +101,7 @@ jobs:
   #     - run:
   #         name: "Creating directory to persist to"
   #         command: "echo creating a direcotry"
-  #     - run: 
+  #     - run:
   #         name: "Persist to workspace"
   #         command: echo "text to output here" > ~/output.txt
   #     - persist_to_workspace:
@@ -128,7 +119,7 @@ jobs:
   #     - attach_workspace:
   #         at: ~/
   #     - run: cat ~/output.txt
-  
+
   # build:
   #   docker:
   #     - image: circleci/node:13.8.0
@@ -165,7 +156,7 @@ jobs:
   #         command: echo "Hello, Error occured when analyzing"
   #         when: on_fail
 
-workflows: 
+workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
@@ -176,16 +167,11 @@ workflows:
       # - configure_infastructure
       # - save_hello_world_output
       # - print_output_file:
-      #     requires: 
+      #     requires:
       #       - save_hello_world_output
       # - test:
       #     requires:
       #       - build
       # - analyze:
       #     requires:
-      #       - test 
-
-
-
-
-
+      #       - test
