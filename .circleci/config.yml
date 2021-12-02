@@ -9,8 +9,8 @@ orbs:
 
 commands:
   destroy_environment:
-    description: "Rolling back changes"
     steps:
+      - run: echo ${CIRCLE_WORKFLOW_ID}
       - run:
           name: Destroy environment
           # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
