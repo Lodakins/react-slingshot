@@ -10,7 +10,7 @@ commands:
           # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
 
   print_pipeline_id:
     description: "Just Testing Command"
@@ -34,6 +34,8 @@ jobs:
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
               --region us-east-1
+      - destroy_environment
+
   configure_infastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -50,9 +52,10 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory.txt npm-main.yml
+
   smoke_test:
     docker:
-      - image: amazon/aws-cli
+      - image: alpine:latest
     steps:
       - checkout
       - run: apk add --update curl
@@ -73,6 +76,7 @@ jobs:
       #     name: on error
       #     command: echo "Hello, Error occured when analyzing"
       #     when: on_fail
+      
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
