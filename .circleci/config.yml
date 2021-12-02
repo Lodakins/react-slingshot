@@ -52,7 +52,7 @@ jobs:
             ansible-playbook -i inventory.txt npm-main.yml
   smoke_test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run: apk add --update curl
