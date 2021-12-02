@@ -16,6 +16,7 @@ commands:
       - run: echo << parameters.id >>
 
   destroy_environment:
+    description: "Destroying environment"
     steps:
       - run:
           name: Destroy environment
@@ -74,7 +75,7 @@ jobs:
               return 1
             fi
       - destroy_environment
-      
+
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
