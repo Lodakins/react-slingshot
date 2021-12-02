@@ -27,6 +27,26 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory.txt npm-main.yml
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - checkout
+      - run:
+          name: smoke test
+          command: |
+            URL="https://blog.udacity.com/"
+            # Test if website exists
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
+      - run:
+          name: on error
+          command: echo "Hello, Error occured when analyzing"
+          when: on_fail
 
   cicd_workflow:
     docker:
@@ -124,7 +144,8 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
-      - configure_infastructure
+      # - configure_infastructure
+      - smoke_test
       # - create_infastructure
       # - save_hello_world_output
       # - print_output_file:
