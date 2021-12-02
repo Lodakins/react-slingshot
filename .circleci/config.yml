@@ -1,5 +1,12 @@
 version: 2.1
 
+
+orbs:
+  # Choose either one of the orbs below
+  # Declare a dependency on the welcome-orb
+  # welcome: circleci/welcome-orb@0.4.1
+  aws-cli: circleci/aws-cli@2.0.3
+
 commands:
   destroy_environment:
     description: "Rolling back changes"
@@ -76,7 +83,7 @@ jobs:
       #     name: on error
       #     command: echo "Hello, Error occured when analyzing"
       #     when: on_fail
-      
+
   cicd_workflow:
     docker:
       - image: circleci/node:13.8.0
