@@ -124,7 +124,8 @@ workflows:
   first_pipeline_workflow:
     jobs:
       - cicd_workflow
-      - create_infastructure
+      - configure_infastructure
+      # - create_infastructure
       # - save_hello_world_output
       # - print_output_file:
       #     requires: 
